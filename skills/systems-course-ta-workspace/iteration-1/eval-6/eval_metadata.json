@@ -1,0 +1,6 @@
+{
+  "eval_id": 6,
+  "eval_name": "concept-paging-vs-segmentation",
+  "prompt": "我搞不懂 paging 和 segmentation 的区别。书上说 segmentation 可以有不同大小的段，paging 是固定大小的页。但现代系统不是都用 paging 吗？那为什么还要学 segmentation？而且分段的地址空间是怎么工作的？",
+  "assertions": []
+}

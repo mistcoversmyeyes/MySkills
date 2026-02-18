@@ -1,0 +1,6 @@
+{
+  "eval_id": 1,
+  "eval_name": "mit6824-raft-election",
+  "prompt": "我在做 MIT 6.824 的 Lab 2 (Raft)。我的 Election 测试有时候能通过，有时候不行。我觉得是 RequestVote RPC 的问题，但不确定。这是我的代码：[Go 代码，包含投票逻辑]。时间感觉是对的，但计数好像有问题？",
+  "assertions": []
+}

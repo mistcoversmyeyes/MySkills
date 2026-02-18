@@ -1,0 +1,19 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "passed": true,
+      "evidence": "No full patched code provided."
+    },
+    {
+      "text": "Focuses on sequence-space reasoning, overlap merge logic, or concrete packet interleavings",
+      "passed": true,
+      "evidence": "Uses half-open intervals, overlap trim, payload offsets, minimal cases."
+    },
+    {
+      "text": "Asks for a specific packet trace or manual simulation case",
+      "passed": true,
+      "evidence": "Requests specific byte-level failing example and printed buffer state."
+    }
+  ]
+}

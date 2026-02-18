@@ -1,0 +1,6 @@
+{
+  "eval_id": 0,
+  "eval_name": "csapp-malloc-segfault",
+  "prompt": "我在做 CMU 15-213 的 Malloc Lab，我的实现总是 segfault。这是我的代码：[一个有 double-free bug 的 malloc 实现]。gdb 显示崩溃在 free() 函数里。我不懂为什么，能帮我看看吗？",
+  "assertions": []
+}

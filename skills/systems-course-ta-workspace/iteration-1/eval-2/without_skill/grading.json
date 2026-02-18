@@ -1,0 +1,19 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "passed": true,
+      "evidence": "No full patched code provided."
+    },
+    {
+      "text": "Analyzes lock ordering, latch protocol, or stale pointer lifetime instead of generic concurrency advice",
+      "passed": true,
+      "evidence": "Focuses on latch crabbing, safe-node logic, page lifetime, split/merge ordering."
+    },
+    {
+      "text": "Requests a concrete interleaving, lock trace, or minimal reproducer",
+      "passed": true,
+      "evidence": "Requests traversal/safe/split/delete/guard code and logging."
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "eval_id": 7,
+  "eval_name": "writeup-experiment-design",
+  "prompt": "能帮我看下我的 cache lab writeup 吗？我测量了不同 cache 大小的性能，但我不确定怎么分析数据。这是我的报告：[包含图表和分析草稿]。我觉得结果有点奇怪，小 cache 反而快？",
+  "assertions": []
+}

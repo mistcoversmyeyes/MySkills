@@ -1,0 +1,169 @@
+{
+  "skill_name": "systems-course-ta",
+  "evals": [
+    {
+      "id": 1,
+      "name": "csapp-malloc-segfault",
+      "prompt": "我在做 CMU 15-213 的 Malloc Lab，我的实现总是 segfault。这是我的代码：[一个有 double-free bug 的 malloc 实现]。gdb 显示崩溃在 free() 函数里。我不懂为什么，能帮我看看吗？",
+      "expected_output": "应该引导学生使用 valgrind/AddressSanitizer 定位问题，并渐进式地提示他们检查内存生命周期和指针操作，而不是直接给出修复代码。",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "type": "qualitative-hard-constraint"
+        },
+        {
+          "text": "Frames the problem in terms of allocator invariants or heap metadata consistency",
+          "type": "qualitative-key-behavior"
+        },
+        {
+          "text": "Requests the smallest next debugging artifacts instead of asking for the whole project",
+          "type": "qualitative-key-behavior"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "mit6824-raft-election",
+      "prompt": "我在做 MIT 6.824 的 Lab 2 (Raft)。我的 Election 测试有时候能通过，有时候不行。我觉得是 RequestVote RPC 的问题，但不确定。这是我的代码：[Go 代码，包含投票逻辑]。时间感觉是对的，但计数好像有问题？",
+      "expected_output": "应该引导学生检查：term 更新逻辑、votedFor 的原子性、投票条件判断。要求学生画出状态转换图，而不是直接说'在第 X 行改成 Y'。应该问学生是否用了日志或打印来调试。",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "type": "qualitative-hard-constraint"
+        },
+        {
+          "text": "Organizes the diagnosis around Raft invariants such as term/state/votedFor or stale replies",
+          "type": "qualitative-key-behavior"
+        },
+        {
+          "text": "Asks for narrow next-step artifacts like election logs or specific handler snippets",
+          "type": "qualitative-key-behavior"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "cmu15445-bplus-tree-concurrency",
+      "prompt": "我的 B+ tree concurrency 实现在高并发测试时会 crash 或者返回错误结果。单线程没问题。我用的是 latch crabbing 协议。这是我的代码：[C++ 代码，包含 latch 获取逻辑]。是不是死锁了？还是有数据竞争？",
+      "expected_output": "应该引导学生分析：latch 的获取顺序是否一致、是否在持有 parent latch 时访问 child、是否存在 latch 释放后的指针失效。应该要求学生画出并发场景的执行序列，而不是直接指出哪一行有问题。",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "type": "qualitative-hard-constraint"
+        },
+        {
+          "text": "Analyzes lock ordering, latch protocol, or stale pointer lifetime instead of generic concurrency advice",
+          "type": "qualitative-key-behavior"
+        },
+        {
+          "text": "Requests a concrete interleaving, lock trace, or minimal reproducer",
+          "type": "qualitative-key-behavior"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "xv6-race-condition",
+      "prompt": "我在做 xv6 的 lazy allocation 实验。有时候会让整个 kernel panic，有时候正常。panic 信息是 trap 什么的。我加了锁但还是不行。这是我的代码：[C 代码，包含页表操作]。是不是我理解错了 lazy allocation 的意思？",
+      "expected_output": "应该引导学生识别：是否存在缺页处理时的竞态条件、锁的粒度是否正确、是否在关中断前/后操作了共享状态。应该问学生看到的具体 panic 信息，并要求他们重现失败模式。",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "type": "qualitative-hard-constraint"
+        },
+        {
+          "text": "Explains lazy allocation in terms of trap/page-fault handling or page-table invariants",
+          "type": "qualitative-key-behavior"
+        },
+        {
+          "text": "Requests the exact panic/trap information and a reproducible trigger",
+          "type": "qualitative-key-behavior"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "networking-tcp-reassembly",
+      "prompt": "我在实现 TCP 的 reassembly。小包没问题，但大数据传输时会丢包或者乱序。Wireshark 显示序列号是对的，但我的 buffer 里数据是乱的。这是我的代码：[C 代码，包含 reassembly buffer 管理]。是不是我处理 overlapping segments 的逻辑有问题？",
+      "expected_output": "应该引导学生检查：segment 插入的位置计算、overlapping 的合并逻辑、序列号空间的处理（wraparound）。应该要求学生画出几个具体的 packet 到达序列，手动模拟他们的算法。",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "type": "qualitative-hard-constraint"
+        },
+        {
+          "text": "Focuses on sequence-space reasoning, overlap merge logic, or concrete packet interleavings",
+          "type": "qualitative-key-behavior"
+        },
+        {
+          "text": "Asks for a specific packet trace or manual simulation case",
+          "type": "qualitative-key-behavior"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "compiler-register-allocation",
+      "prompt": "我在做编译器的 register allocation。图着色的时候，有些 live range 太长，spill 了之后反而更慢了。我用的是简单的度数优先启发式。这是我的代码：[代码，包含冲突图构建和着色]。有什么更好的策略吗？",
+      "expected_output": "应该引导学生思考：spill cost 的计算方式、是否考虑了循环深度、是否可以在 spill 后重新计算冲突图。应该解释 spill 的 tradeoff，而不是直接建议'用 Chaitin-Briggs算法'。要求学生测量不同策略的性能。",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Avoids giving a one-line algorithm swap as the whole answer",
+          "type": "qualitative-hard-constraint"
+        },
+        {
+          "text": "Explains spill decisions in terms of cost model, loop depth, or measurement tradeoffs",
+          "type": "qualitative-key-behavior"
+        },
+        {
+          "text": "Requests or recommends comparative performance measurement",
+          "type": "qualitative-key-behavior"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "concept-paging-vs-segmentation",
+      "prompt": "我搞不懂 paging 和 segmentation 的区别。书上说 segmentation 可以有不同大小的段，paging 是固定大小的页。但现代系统不是都用 paging 吗？那为什么还要学 segmentation？而且分段的地址空间是怎么工作的？",
+      "expected_output": "应该先解释底层模型（segmentation 是逻辑划分，paging 是物理划分），然后联系历史原因（为什么 x86 有 segmentation），最后说明现代系统如何处理（只用 paging，segmentation 基本是 flat）。应该避免教科书式的泛泛而谈，而是针对学生的困惑点。",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Explains the conceptual distinction instead of dumping textbook definitions only",
+          "type": "qualitative-key-behavior"
+        },
+        {
+          "text": "Connects the explanation to historical or modern-system context",
+          "type": "qualitative-key-behavior"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "writeup-experiment-design",
+      "prompt": "能帮我看下我的 cache lab writeup 吗？我测量了不同 cache 大小的性能，但我不确定怎么分析数据。这是我的报告：[包含图表和分析草稿]。我觉得结果有点奇怪，小 cache 反而快？",
+      "expected_output": "应该引导学生检查：测量方法的正确性（是否清空了 cache、是否多次测量取平均）、数据的统计显著性、实验参数的设置。应该指出报告中模糊或缺失的假设，而不是直接重写整个分析。",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Does not fully rewrite the entire report as the primary response",
+          "type": "qualitative-hard-constraint"
+        },
+        {
+          "text": "Focuses on experiment design, assumptions, and measurement validity",
+          "type": "qualitative-key-behavior"
+        },
+        {
+          "text": "Points out what additional evidence or measurements are needed",
+          "type": "qualitative-key-behavior"
+        }
+      ]
+    }
+  ]
+}

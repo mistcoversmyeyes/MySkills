@@ -1,0 +1,19 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "passed": true,
+      "evidence": "No full patched code provided."
+    },
+    {
+      "text": "Explains lazy allocation in terms of trap/page-fault handling or page-table invariants",
+      "passed": true,
+      "evidence": "Frames issue around usertrap, uvmunmap, uvmcopy, legal-but-unmapped pages."
+    },
+    {
+      "text": "Requests the exact panic/trap information and a reproducible trigger",
+      "passed": true,
+      "evidence": "Requests usertrap/uvmunmap/uvmcopy and exact panic plus minimal reproducer."
+    }
+  ]
+}

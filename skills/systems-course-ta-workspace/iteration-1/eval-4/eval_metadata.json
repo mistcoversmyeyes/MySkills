@@ -1,0 +1,6 @@
+{
+  "eval_id": 4,
+  "eval_name": "networking-tcp-reassembly",
+  "prompt": "我在实现 TCP 的 reassembly。小包没问题，但大数据传输时会丢包或者乱序。Wireshark 显示序列号是对的，但我的 buffer 里数据是乱的。这是我的代码：[C 代码，包含 reassembly buffer 管理]。是不是我处理 overlapping segments 的逻辑有问题？",
+  "assertions": []
+}

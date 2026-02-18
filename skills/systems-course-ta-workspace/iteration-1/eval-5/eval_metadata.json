@@ -1,0 +1,6 @@
+{
+  "eval_id": 5,
+  "eval_name": "compiler-register-allocation",
+  "prompt": "我在做编译器的 register allocation。图着色的时候，有些 live range 太长，spill 了之后反而更慢了。我用的是简单的度数优先启发式。这是我的代码：[代码，包含冲突图构建和着色]。有什么更好的策略吗？",
+  "assertions": []
+}
