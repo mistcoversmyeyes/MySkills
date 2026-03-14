@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-LeetCode 题目信息获取脚本
+LeetCode 题目信息获取脚本（纯 Python 实现，无外部依赖）
 
 用法:
     python fetch_problem.py <problem_id>
@@ -18,8 +18,11 @@ import os
 import re
 import json
 import argparse
-import subprocess
 from typing import Dict, Any, Optional
+
+# 使用标准库 urllib
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError, URLError
 
 
 def parse_problem_id_from_file(filepath: str) -> Optional[str]:
@@ -54,9 +57,163 @@ def parse_problem_id_from_file(filepath: str) -> Optional[str]:
         return None
 
 
-def fetch_using_leetcode_cli(problem_id: str) -> Optional[Dict[str, Any]]:
+def fetch_problem_list(skip: int, limit: int = 100) -> list:
     """
-    使用 leetcode-cli (如果已安装) 获取题目信息
+    从 LeetCode 中文站获取题目列表
+
+    Args:
+        skip: 跳过数量
+        limit: 返回数量
+
+    Returns:
+        题目列表
+    """
+    query = {
+        "operationName": "problemsetQuestionList",
+        "query": """
+        query problemsetQuestionList($categorySlug: String, $skip: Int, $limit: Int) {
+          problemsetQuestionList(
+            categorySlug: $categorySlug
+            skip: $skip
+            limit: $limit
+          ) {
+            questions {
+              frontendQuestionId
+              title
+              titleSlug
+              difficulty
+              topicTags {
+                name
+                slug
+              }
+            }
+          }
+        }
+        """,
+        "variables": {
+            "categorySlug": "",
+            "skip": skip,
+            "limit": limit
+        }
+    }
+
+    req = Request(
+        "https://leetcode.cn/graphql/",
+        data=json.dumps(query).encode('utf-8'),
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Referer": "https://leetcode.cn/problemset/"
+        },
+        method="POST"
+    )
+
+    try:
+        with urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            return data.get('data', {}).get('problemsetQuestionList', {}).get('questions', [])
+    except (HTTPError, URLError, json.JSONDecodeError) as e:
+        print(f"[WARNING] 获取题目列表失败: {e}", file=sys.stderr)
+        return []
+
+
+def fetch_problem_detail(title_slug: str) -> Optional[Dict[str, Any]]:
+    """
+    从 LeetCode 中文站获取题目详情
+
+    Args:
+        title_slug: 题目的 title slug
+
+    Returns:
+        题目信息字典，失败返回 None
+    """
+    query = {
+        "operationName": "questionData",
+        "query": """
+        query questionData($titleSlug: String!) {
+          question(titleSlug: $titleSlug) {
+            questionId
+            questionFrontendId
+            title
+            translatedTitle
+            titleSlug
+            content
+            translatedContent
+            difficulty
+            topicTags {
+              name
+              slug
+              translatedName
+            }
+            codeSnippets {
+              lang
+              langSlug
+              code
+            }
+          }
+        }
+        """,
+        "variables": {"titleSlug": title_slug}
+    }
+
+    req = Request(
+        "https://leetcode.cn/graphql/",
+        data=json.dumps(query).encode('utf-8'),
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Referer": f"https://leetcode.cn/problems/{title_slug}/"
+        },
+        method="POST"
+    )
+
+    try:
+        with urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            return data.get('data', {}).get('question', {})
+    except (HTTPError, URLError, json.JSONDecodeError) as e:
+        print(f"[WARNING] 获取题目详情失败: {e}", file=sys.stderr)
+        return None
+
+
+def find_problem_by_id(problem_id: str) -> Optional[Dict[str, Any]]:
+    """
+    通过题号查找题目
+
+    Args:
+        problem_id: 题号
+
+    Returns:
+        题目基本信息，失败返回 None
+    """
+    try:
+        pid = int(problem_id)
+    except ValueError:
+        return None
+
+    # 估算 skip 位置（题号通常接近 skip 值）
+    # LeetCode 题号从 1 开始，skip 从 0 开始
+    estimated_skip = max(0, pid - 10)
+
+    # 获取估算位置附近的数据
+    questions = fetch_problem_list(estimated_skip, 50)
+
+    for q in questions:
+        if q.get('frontendQuestionId') == problem_id:
+            return q
+
+    # 如果没找到，尝试更宽的范围
+    questions = fetch_problem_list(0, min(pid + 50, 500))
+    for q in questions:
+        if q.get('frontendQuestionId') == problem_id:
+            return q
+
+    return None
+
+
+def fetch_using_leetcode_api(problem_id: str) -> Optional[Dict[str, Any]]:
+    """
+    使用 LeetCode GraphQL API 获取题目信息
 
     Args:
         problem_id: 题号
@@ -64,26 +221,51 @@ def fetch_using_leetcode_cli(problem_id: str) -> Optional[Dict[str, Any]]:
     Returns:
         题目信息字典，失败返回 None
     """
-    try:
-        # 检查是否安装了 leetcode-cli
-        result = subprocess.run(
-            ["leetcode", "info", str(problem_id), "-x"],
-            capture_output=True,
-            text=True,
-            timeout=10
-        )
+    # 第一步：查找题目基本信息
+    problem_info = find_problem_by_id(problem_id)
 
-        if result.returncode == 0:
-            # 尝试解析 JSON 输出
-            try:
-                return json.loads(result.stdout)
-            except json.JSONDecodeError:
-                pass
-
+    if not problem_info:
+        print(f"[WARNING] 未找到题号 {problem_id}", file=sys.stderr)
         return None
 
-    except (FileNotFoundError, subprocess.TimeoutExpired):
+    title_slug = problem_info.get('titleSlug')
+    if not title_slug:
         return None
+
+    # 第二步：获取详细信息
+    detail = fetch_problem_detail(title_slug)
+
+    if not detail:
+        # 如果详情获取失败，返回基本信息
+        return {
+            "id": problem_info.get('frontendQuestionId'),
+            "title": problem_info.get('title'),
+            "slug": title_slug,
+            "difficulty": problem_info.get('difficulty'),
+            "tags": [tag.get('name') for tag in problem_info.get('topicTags', [])],
+            "content": None,
+            "codeSnippets": [],
+            "link": f"https://leetcode.cn/problems/{title_slug}/"
+        }
+
+    # 使用翻译后的标题和内容（如果有）
+    title = detail.get('translatedTitle') or detail.get('title')
+    content = detail.get('translatedContent') or detail.get('content')
+
+    # 转换为与原来类似的输出格式
+    result = {
+        "id": detail.get('questionFrontendId'),
+        "title": title,
+        "slug": detail.get('titleSlug'),
+        "difficulty": detail.get('difficulty'),
+        "content": content,
+        "tags": [tag.get('translatedName') or tag.get('name')
+                 for tag in detail.get('topicTags', [])],
+        "codeSnippets": detail.get('codeSnippets', []),
+        "link": f"https://leetcode.cn/problems/{detail.get('titleSlug')}/"
+    }
+
+    return result
 
 
 def format_simple_problem_info(problem_id: str, title: str = "") -> str:
@@ -109,7 +291,8 @@ def format_simple_problem_info(problem_id: str, title: str = "") -> str:
     lines.append("")
     lines.append("LeetCode 链接: ")
     if title:
-        lines.append(f"- 中文站: https://leetcode.cn/problems/{title.lower().replace(' ', '-')}/")
+        slug = title.lower().replace(' ', '-').replace('(', '').replace(')', '')
+        lines.append(f"- 中文站: https://leetcode.cn/problems/{slug}/")
     lines.append(f"- 国际站: https://leetcode.com/problems/problem-{problem_id}/")
     lines.append("")
 
@@ -139,8 +322,8 @@ def main():
         parser.print_help()
         sys.exit(1)
 
-    # 尝试使用 leetcode-cli
-    question_data = fetch_using_leetcode_cli(problem_id)
+    # 使用 API 获取题目信息
+    question_data = fetch_using_leetcode_api(problem_id)
 
     if question_data:
         print(json.dumps(question_data, ensure_ascii=False, indent=2))

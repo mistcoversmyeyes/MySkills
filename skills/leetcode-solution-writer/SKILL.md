@@ -28,9 +28,7 @@ python scripts/fetch_problem.py --file /path/to/problem.cpp
 python scripts/fetch_problem.py 49
 ```
 
-脚本支持多种数据源（按优先级）：
-1. leetcode-cli（如果已安装）
-2. 降级模式：输出基本信息模板，手动补充
+脚本直接调用 LeetCode GraphQL API 获取题目数据，无需外部依赖。
 
 ### 第三步：创建题解目录和文件
 
