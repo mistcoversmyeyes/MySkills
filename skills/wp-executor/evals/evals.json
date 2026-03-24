@@ -1,0 +1,128 @@
+{
+  "skill_name": "project-scope-manager",
+  "evals": [
+    {
+      "id": 0,
+      "name": "xiaohongshu-frontend",
+      "prompt": "给我做一个仿小红书的前端界面，要求能够正常的新增笔记，浏览笔记",
+      "expected_output": "输出 project-scope.md，包含3级WBS、每个工作包的活动清单和验收标准、Mermaid依赖网络图、并行执行建议。因为没有指定技术栈，应当主动询问或给出推荐。",
+      "files": [],
+      "assertions": [
+        {
+          "name": "project_scope_md_created",
+          "description": "project-scope.md 文件被创建且内容非空（>200字符）"
+        },
+        {
+          "name": "wbs_three_levels",
+          "description": "文档包含3级WBS层级结构，能看到项目→功能域→工作包的树形组织"
+        },
+        {
+          "name": "min_four_work_packages",
+          "description": "文档中至少定义了4个工作包（WP-XX格式或等效标题）"
+        },
+        {
+          "name": "activities_per_wp",
+          "description": "每个工作包都包含活动清单（至少2条活动）"
+        },
+        {
+          "name": "acceptance_criteria_per_wp",
+          "description": "每个工作包都包含验收标准（- [ ] 复选框格式，至少2条）"
+        },
+        {
+          "name": "mermaid_diagram_present",
+          "description": "文档包含 ```mermaid 代码块，且包含工作包节点和依赖箭头"
+        },
+        {
+          "name": "parallel_batches_present",
+          "description": "文档包含并行执行建议，说明哪些工作包可以同时进行"
+        },
+        {
+          "name": "tech_stack_mentioned",
+          "description": "文档明确说明了技术栈选择（如React/Vue/框架名称），不只是'前端框架'"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "todo-vue-node",
+      "prompt": "我要做一个待办事项 App，用 Vue 3 + Node.js，支持增删改查和本地持久化",
+      "expected_output": "输出 project-scope.md，技术栈应使用用户指定的 Vue 3 + Node.js，WBS应包含前端和后端两个维度的工作包，含活动清单、验收标准和网络图。",
+      "files": [],
+      "assertions": [
+        {
+          "name": "project_scope_md_created",
+          "description": "project-scope.md 文件被创建且内容非空（>200字符）"
+        },
+        {
+          "name": "wbs_three_levels",
+          "description": "文档包含3级WBS层级结构，能看到项目→功能域→工作包的树形组织"
+        },
+        {
+          "name": "min_four_work_packages",
+          "description": "文档中至少定义了4个工作包（WP-XX格式或等效标题）"
+        },
+        {
+          "name": "activities_per_wp",
+          "description": "每个工作包都包含活动清单（至少2条活动）"
+        },
+        {
+          "name": "acceptance_criteria_per_wp",
+          "description": "每个工作包都包含验收标准（- [ ] 复选框格式，至少2条）"
+        },
+        {
+          "name": "mermaid_diagram_present",
+          "description": "文档包含 ```mermaid 代码块，且包含工作包节点和依赖箭头"
+        },
+        {
+          "name": "parallel_batches_present",
+          "description": "文档包含并行执行建议，说明哪些工作包可以同时进行"
+        },
+        {
+          "name": "specified_stack_respected",
+          "description": "文档使用了用户指定的 Vue 3 和 Node.js，而非替换为其他技术栈（如React或Python）"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "markdown-notes-app",
+      "prompt": "做一个 Markdown 笔记应用 MVP，支持创建/编辑笔记、标签分类、以及全文搜索",
+      "expected_output": "输出 project-scope.md，搜索功能应单独拆分为工作包（全文搜索是独立的复杂度），WBS层级清晰，网络图体现搜索依赖数据层，并行批次合理。",
+      "files": [],
+      "assertions": [
+        {
+          "name": "project_scope_md_created",
+          "description": "project-scope.md 文件被创建且内容非空（>200字符）"
+        },
+        {
+          "name": "wbs_three_levels",
+          "description": "文档包含3级WBS层级结构，能看到项目→功能域→工作包的树形组织"
+        },
+        {
+          "name": "min_four_work_packages",
+          "description": "文档中至少定义了4个工作包（WP-XX格式或等效标题）"
+        },
+        {
+          "name": "activities_per_wp",
+          "description": "每个工作包都包含活动清单（至少2条活动）"
+        },
+        {
+          "name": "acceptance_criteria_per_wp",
+          "description": "每个工作包都包含验收标准（- [ ] 复选框格式，至少2条）"
+        },
+        {
+          "name": "mermaid_diagram_present",
+          "description": "文档包含 ```mermaid 代码块，且包含工作包节点和依赖箭头"
+        },
+        {
+          "name": "parallel_batches_present",
+          "description": "文档包含并行执行建议，说明哪些工作包可以同时进行"
+        },
+        {
+          "name": "search_is_separate_wp",
+          "description": "全文搜索功能作为独立的工作包存在，而非合并在笔记列表或其他功能里"
+        }
+      ]
+    }
+  ]
+}
