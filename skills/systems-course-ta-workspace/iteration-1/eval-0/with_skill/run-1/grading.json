@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "passed": true,
+      "evidence": "The response gives debugging hypotheses, invariants, and requested artifacts without providing patched allocator code."
+    },
+    {
+      "text": "Frames the problem in terms of allocator invariants or heap metadata consistency",
+      "passed": true,
+      "evidence": "It focuses on header/footer consistency, alloc bits, free-list duplication, and coalesce behavior."
+    },
+    {
+      "text": "Requests the smallest next debugging artifacts instead of asking for the whole project",
+      "passed": true,
+      "evidence": "It asks only for free/coalesce/free-list helpers, a minimal repro, and the values printed at the crashing free."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

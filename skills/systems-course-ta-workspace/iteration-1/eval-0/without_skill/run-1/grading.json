@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "passed": true,
+      "evidence": "The response suggests debugging directions and does not provide a full allocator patch."
+    },
+    {
+      "text": "Frames the problem in terms of allocator invariants or heap metadata consistency",
+      "passed": true,
+      "evidence": "It discusses alloc bits, header/footer consistency, free-list duplication, and heap corruption."
+    },
+    {
+      "text": "Requests the smallest next debugging artifacts instead of asking for the whole project",
+      "passed": false,
+      "evidence": "It asks for a broad set of functions including malloc, free, coalesce, place, and free-list operations rather than the narrowest next artifact."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 1,
+    "total": 3,
+    "pass_rate": 0.6667
+  }
+}

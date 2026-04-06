@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a one-line algorithm swap as the whole answer",
+      "passed": true,
+      "evidence": "The response does not reduce the answer to a one-line algorithm replacement and instead explains several incremental strategy changes."
+    },
+    {
+      "text": "Explains spill decisions in terms of cost model, loop depth, or measurement tradeoffs",
+      "passed": true,
+      "evidence": "It explicitly discusses spill cost, loop depth, block frequency, rematerialization, and measurement tradeoffs."
+    },
+    {
+      "text": "Requests or recommends comparative performance measurement",
+      "passed": true,
+      "evidence": "It asks for runtime, dynamic load/store count, move count, compile time, and baseline numbers."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

@@ -1,6 +1,19 @@
 {
   "eval_id": 4,
   "eval_name": "networking-tcp-reassembly",
-  "prompt": "我在实现 TCP 的 reassembly。小包没问题，但大数据传输时会丢包或者乱序。Wireshark 显示序列号是对的，但我的 buffer 里数据是乱的。这是我的代码：[C 代码，包含 reassembly buffer 管理]。是不是我处理 overlapping segments 的逻辑有问题？",
-  "assertions": []
+  "prompt": "\u6211\u5728\u5b9e\u73b0 TCP \u7684 reassembly\u3002\u5c0f\u5305\u6ca1\u95ee\u9898\uff0c\u4f46\u5927\u6570\u636e\u4f20\u8f93\u65f6\u4f1a\u4e22\u5305\u6216\u8005\u4e71\u5e8f\u3002Wireshark \u663e\u793a\u5e8f\u5217\u53f7\u662f\u5bf9\u7684\uff0c\u4f46\u6211\u7684 buffer \u91cc\u6570\u636e\u662f\u4e71\u7684\u3002\u8fd9\u662f\u6211\u7684\u4ee3\u7801\uff1a[C \u4ee3\u7801\uff0c\u5305\u542b reassembly buffer \u7ba1\u7406]\u3002\u662f\u4e0d\u662f\u6211\u5904\u7406 overlapping segments \u7684\u903b\u8f91\u6709\u95ee\u9898\uff1f",
+  "assertions": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "type": "qualitative-hard-constraint"
+    },
+    {
+      "text": "Focuses on sequence-space reasoning, overlap merge logic, or concrete packet interleavings",
+      "type": "qualitative-key-behavior"
+    },
+    {
+      "text": "Asks for a specific packet trace or manual simulation case",
+      "type": "qualitative-key-behavior"
+    }
+  ]
 }

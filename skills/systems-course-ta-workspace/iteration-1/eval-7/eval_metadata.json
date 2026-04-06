@@ -1,6 +1,19 @@
 {
   "eval_id": 7,
   "eval_name": "writeup-experiment-design",
-  "prompt": "能帮我看下我的 cache lab writeup 吗？我测量了不同 cache 大小的性能，但我不确定怎么分析数据。这是我的报告：[包含图表和分析草稿]。我觉得结果有点奇怪，小 cache 反而快？",
-  "assertions": []
+  "prompt": "\u80fd\u5e2e\u6211\u770b\u4e0b\u6211\u7684 cache lab writeup \u5417\uff1f\u6211\u6d4b\u91cf\u4e86\u4e0d\u540c cache \u5927\u5c0f\u7684\u6027\u80fd\uff0c\u4f46\u6211\u4e0d\u786e\u5b9a\u600e\u4e48\u5206\u6790\u6570\u636e\u3002\u8fd9\u662f\u6211\u7684\u62a5\u544a\uff1a[\u5305\u542b\u56fe\u8868\u548c\u5206\u6790\u8349\u7a3f]\u3002\u6211\u89c9\u5f97\u7ed3\u679c\u6709\u70b9\u5947\u602a\uff0c\u5c0f cache \u53cd\u800c\u5feb\uff1f",
+  "assertions": [
+    {
+      "text": "Does not fully rewrite the entire report as the primary response",
+      "type": "qualitative-hard-constraint"
+    },
+    {
+      "text": "Focuses on experiment design, assumptions, and measurement validity",
+      "type": "qualitative-key-behavior"
+    },
+    {
+      "text": "Points out what additional evidence or measurements are needed",
+      "type": "qualitative-key-behavior"
+    }
+  ]
 }

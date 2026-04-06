@@ -1,0 +1,1 @@
+Generic concept explanation contrasting paging and segmentation, with historical context and modern-system motivation.

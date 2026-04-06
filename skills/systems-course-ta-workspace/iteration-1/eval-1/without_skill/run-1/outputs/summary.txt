@@ -1,0 +1,1 @@
+Generic Raft debugging answer focusing on election state, stale replies, and logging.

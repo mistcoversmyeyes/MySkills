@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Does not fully rewrite the entire report as the primary response",
+      "passed": true,
+      "evidence": "The response critiques the experiment design and asks for evidence instead of rewriting the report."
+    },
+    {
+      "text": "Focuses on experiment design, assumptions, and measurement validity",
+      "passed": true,
+      "evidence": "It focuses on repeat runs, warm-cache bias, workload size, initialization, and separating observation from explanation."
+    },
+    {
+      "text": "Points out what additional evidence or measurements are needed",
+      "passed": true,
+      "evidence": "It asks for repeated measurements, variance or error bars, workload size, cache-clearing details, and raw data."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

@@ -1,0 +1,1 @@
+Malloc lab TA response focused on allocator invariants, heap metadata consistency, and smallest-next-artifact debugging.

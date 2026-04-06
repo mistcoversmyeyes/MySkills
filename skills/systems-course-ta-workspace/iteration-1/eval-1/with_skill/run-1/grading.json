@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "passed": true,
+      "evidence": "The response stays at the invariant and logging level and does not provide a full Raft patch."
+    },
+    {
+      "text": "Organizes the diagnosis around Raft invariants such as term/state/votedFor or stale replies",
+      "passed": true,
+      "evidence": "It centers the diagnosis on electionTerm, candidate-only vote counting, higher-term downgrade, and currentTerm/state/votedFor consistency."
+    },
+    {
+      "text": "Asks for narrow next-step artifacts like election logs or specific handler snippets",
+      "passed": true,
+      "evidence": "It asks only for election start code, RequestVote reply handling, handler code, and a small failure log."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

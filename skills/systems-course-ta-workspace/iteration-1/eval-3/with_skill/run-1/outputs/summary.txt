@@ -1,0 +1,1 @@
+Xv6 lazy allocation response framed the bug via trap/page-fault and page-table invariants, then asked for exact panic data and a reproducible trigger.

@@ -1,0 +1,1 @@
+Register-allocation response explained spill tradeoffs via cost model, loop depth, and comparative measurement rather than a one-line algorithm swap.

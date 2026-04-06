@@ -1,0 +1,1 @@
+Concurrency B+ tree response emphasized lock ordering, latch protocol, pointer lifetime, and a minimal interleaving trace.

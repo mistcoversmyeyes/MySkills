@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "passed": true,
+      "evidence": "The response offers debugging directions rather than a full implementation patch."
+    },
+    {
+      "text": "Focuses on sequence-space reasoning, overlap merge logic, or concrete packet interleavings",
+      "passed": true,
+      "evidence": "It discusses overlap policy, merge boundaries, next expected sequence, and payload offsets."
+    },
+    {
+      "text": "Asks for a specific packet trace or manual simulation case",
+      "passed": false,
+      "evidence": "It asks for a concrete example, but not a clearly structured trace or hand-simulated case set."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 1,
+    "total": 3,
+    "pass_rate": 0.6667
+  }
+}

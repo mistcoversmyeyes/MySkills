@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a one-line algorithm swap as the whole answer",
+      "passed": true,
+      "evidence": "The response explains several allocator strategies and tradeoffs instead of replacing the answer with a one-line algorithm name."
+    },
+    {
+      "text": "Explains spill decisions in terms of cost model, loop depth, or measurement tradeoffs",
+      "passed": true,
+      "evidence": "It discusses spill cost, hot paths, loop depth, splitting, and tradeoffs."
+    },
+    {
+      "text": "Requests or recommends comparative performance measurement",
+      "passed": true,
+      "evidence": "It asks for runtime, dynamic load/store, move counts, and baseline measurements."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

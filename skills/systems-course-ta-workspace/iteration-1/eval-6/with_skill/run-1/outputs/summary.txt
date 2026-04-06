@@ -1,0 +1,1 @@
+Concept explanation contrasted paging versus segmentation through address interpretation, then connected it to modern systems and x86 history.

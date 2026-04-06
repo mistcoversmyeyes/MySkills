@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "passed": true,
+      "evidence": "No full patched code provided."
+    },
+    {
+      "text": "Analyzes lock ordering, latch protocol, or stale pointer lifetime instead of generic concurrency advice",
+      "passed": true,
+      "evidence": "Focuses on latch ordering, safe-node logic, pointer lifetime, and split/merge consistency."
+    },
+    {
+      "text": "Requests a concrete interleaving, lock trace, or minimal reproducer",
+      "passed": true,
+      "evidence": "Requests a lock trace or failure interleaving with thread and page information."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

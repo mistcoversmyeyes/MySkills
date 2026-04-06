@@ -1,0 +1,1 @@
+Raft debugging response organized around term/state/votedFor invariants and narrow logging artifacts.

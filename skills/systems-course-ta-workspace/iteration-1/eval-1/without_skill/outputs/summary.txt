@@ -1,1 +1,0 @@
-Baseline run output recovered from agent result. Focused on likely Raft election flakiness causes: election state atomicity, stale reply filtering, higher-term reply handling, and RequestVote predicate checks. Output gives structured debugging guidance without repository-specific code because no input code files were present.

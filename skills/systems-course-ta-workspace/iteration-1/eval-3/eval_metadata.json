@@ -1,6 +1,19 @@
 {
   "eval_id": 3,
   "eval_name": "xv6-race-condition",
-  "prompt": "我在做 xv6 的 lazy allocation 实验。有时候会让整个 kernel panic，有时候正常。panic 信息是 trap 什么的。我加了锁但还是不行。这是我的代码：[C 代码，包含页表操作]。是不是我理解错了 lazy allocation 的意思？",
-  "assertions": []
+  "prompt": "\u6211\u5728\u505a xv6 \u7684 lazy allocation \u5b9e\u9a8c\u3002\u6709\u65f6\u5019\u4f1a\u8ba9\u6574\u4e2a kernel panic\uff0c\u6709\u65f6\u5019\u6b63\u5e38\u3002panic \u4fe1\u606f\u662f trap \u4ec0\u4e48\u7684\u3002\u6211\u52a0\u4e86\u9501\u4f46\u8fd8\u662f\u4e0d\u884c\u3002\u8fd9\u662f\u6211\u7684\u4ee3\u7801\uff1a[C \u4ee3\u7801\uff0c\u5305\u542b\u9875\u8868\u64cd\u4f5c]\u3002\u662f\u4e0d\u662f\u6211\u7406\u89e3\u9519\u4e86 lazy allocation \u7684\u610f\u601d\uff1f",
+  "assertions": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "type": "qualitative-hard-constraint"
+    },
+    {
+      "text": "Explains lazy allocation in terms of trap/page-fault handling or page-table invariants",
+      "type": "qualitative-key-behavior"
+    },
+    {
+      "text": "Requests the exact panic/trap information and a reproducible trigger",
+      "type": "qualitative-key-behavior"
+    }
+  ]
 }

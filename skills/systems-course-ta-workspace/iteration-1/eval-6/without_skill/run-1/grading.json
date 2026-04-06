@@ -1,0 +1,20 @@
+{
+  "expectations": [
+    {
+      "text": "Explains the conceptual distinction instead of dumping textbook definitions only",
+      "passed": true,
+      "evidence": "The response frames the difference as two address-organization models rather than only listing definitions."
+    },
+    {
+      "text": "Connects the explanation to historical or modern-system context",
+      "passed": true,
+      "evidence": "It explains why modern systems favor paging and why segmentation still matters for x86 history and address-space thinking."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 0,
+    "total": 2,
+    "pass_rate": 1.0
+  }
+}

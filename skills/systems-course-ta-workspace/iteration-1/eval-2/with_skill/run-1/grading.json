@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "passed": true,
+      "evidence": "The response diagnoses likely failure classes and requests traces without proposing a complete code patch."
+    },
+    {
+      "text": "Analyzes lock ordering, latch protocol, or stale pointer lifetime instead of generic concurrency advice",
+      "passed": true,
+      "evidence": "It focuses on latch crabbing, safe-node rules, unlock timing, pointer lifetime after unlatch/unpin, and lock ordering."
+    },
+    {
+      "text": "Requests a concrete interleaving, lock trace, or minimal reproducer",
+      "passed": true,
+      "evidence": "It explicitly asks for a failing interleaving or latch log with thread id, page id, mode, and safe-node decisions."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

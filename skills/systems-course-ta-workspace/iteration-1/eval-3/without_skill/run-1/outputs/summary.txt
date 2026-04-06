@@ -1,0 +1,1 @@
+Generic xv6 lazy-allocation answer about page-fault semantics and helper functions, but less pointed about exact artifacts.

@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Does not fully rewrite the entire report as the primary response",
+      "passed": true,
+      "evidence": "The response critiques the analysis structure rather than rewriting the full report."
+    },
+    {
+      "text": "Focuses on experiment design, assumptions, and measurement validity",
+      "passed": true,
+      "evidence": "It focuses on repeat runs, warm-up effects, workload size, and control of variables."
+    },
+    {
+      "text": "Points out what additional evidence or measurements are needed",
+      "passed": true,
+      "evidence": "It asks for repeated measurements, variability, parameters, measurement method, and raw data."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

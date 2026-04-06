@@ -1,0 +1,1 @@
+Generic debugging response for malloc/free segfault, emphasizing common heap-corruption causes and asking for broader code context.

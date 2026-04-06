@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "passed": true,
+      "evidence": "The response reasons about data representation and debugging cases without providing a full implementation patch."
+    },
+    {
+      "text": "Focuses on sequence-space reasoning, overlap merge logic, or concrete packet interleavings",
+      "passed": true,
+      "evidence": "It uses half-open intervals, overlap trimming, next_expected_seq, and payload-offset synchronization."
+    },
+    {
+      "text": "Asks for a specific packet trace or manual simulation case",
+      "passed": true,
+      "evidence": "It requests a concrete packet trace and three explicit hand-simulated cases."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  }
+}

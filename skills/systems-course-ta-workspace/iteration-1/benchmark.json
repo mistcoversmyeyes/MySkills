@@ -4,16 +4,584 @@
     "skill_path": "<path/to/skill>",
     "executor_model": "<model-name>",
     "analyzer_model": "<model-name>",
-    "timestamp": "2026-03-30T16:20:21Z",
-    "evals_run": [],
+    "timestamp": "2026-04-06T13:49:04Z",
+    "evals_run": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
     "runs_per_configuration": 3
   },
-  "runs": [],
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 82.0,
+        "tokens": 980,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "passed": true,
+          "evidence": "The response gives debugging hypotheses, invariants, and requested artifacts without providing patched allocator code."
+        },
+        {
+          "text": "Frames the problem in terms of allocator invariants or heap metadata consistency",
+          "passed": true,
+          "evidence": "It focuses on header/footer consistency, alloc bits, free-list duplication, and coalesce behavior."
+        },
+        {
+          "text": "Requests the smallest next debugging artifacts instead of asking for the whole project",
+          "passed": true,
+          "evidence": "It asks only for free/coalesce/free-list helpers, a minimal repro, and the values printed at the crashing free."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 87.0,
+        "tokens": 1015,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "passed": true,
+          "evidence": "The response stays at the invariant and logging level and does not provide a full Raft patch."
+        },
+        {
+          "text": "Organizes the diagnosis around Raft invariants such as term/state/votedFor or stale replies",
+          "passed": true,
+          "evidence": "It centers the diagnosis on electionTerm, candidate-only vote counting, higher-term downgrade, and currentTerm/state/votedFor consistency."
+        },
+        {
+          "text": "Asks for narrow next-step artifacts like election logs or specific handler snippets",
+          "passed": true,
+          "evidence": "It asks only for election start code, RequestVote reply handling, handler code, and a small failure log."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 84.0,
+        "tokens": 960,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "passed": true,
+          "evidence": "The response diagnoses likely failure classes and requests traces without proposing a complete code patch."
+        },
+        {
+          "text": "Analyzes lock ordering, latch protocol, or stale pointer lifetime instead of generic concurrency advice",
+          "passed": true,
+          "evidence": "It focuses on latch crabbing, safe-node rules, unlock timing, pointer lifetime after unlatch/unpin, and lock ordering."
+        },
+        {
+          "text": "Requests a concrete interleaving, lock trace, or minimal reproducer",
+          "passed": true,
+          "evidence": "It explicitly asks for a failing interleaving or latch log with thread id, page id, mode, and safe-node decisions."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 78.0,
+        "tokens": 930,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "passed": true,
+          "evidence": "The response stays at the semantic and artifact-request level and does not dump a full xv6 fix."
+        },
+        {
+          "text": "Explains lazy allocation in terms of trap/page-fault handling or page-table invariants",
+          "passed": true,
+          "evidence": "It frames the bug around legal-but-unmapped pages, usertrap, uvmunmap, uvmcopy, and helper semantics."
+        },
+        {
+          "text": "Requests the exact panic/trap information and a reproducible trigger",
+          "passed": true,
+          "evidence": "It asks for exact panic/scause/stval plus specific repro paths such as sbrk+fork or syscall access to a lazy page."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 80.0,
+        "tokens": 965,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "passed": true,
+          "evidence": "The response reasons about data representation and debugging cases without providing a full implementation patch."
+        },
+        {
+          "text": "Focuses on sequence-space reasoning, overlap merge logic, or concrete packet interleavings",
+          "passed": true,
+          "evidence": "It uses half-open intervals, overlap trimming, next_expected_seq, and payload-offset synchronization."
+        },
+        {
+          "text": "Asks for a specific packet trace or manual simulation case",
+          "passed": true,
+          "evidence": "It requests a concrete packet trace and three explicit hand-simulated cases."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 5,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 76.0,
+        "tokens": 900,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a one-line algorithm swap as the whole answer",
+          "passed": true,
+          "evidence": "The response does not reduce the answer to a one-line algorithm replacement and instead explains several incremental strategy changes."
+        },
+        {
+          "text": "Explains spill decisions in terms of cost model, loop depth, or measurement tradeoffs",
+          "passed": true,
+          "evidence": "It explicitly discusses spill cost, loop depth, block frequency, rematerialization, and measurement tradeoffs."
+        },
+        {
+          "text": "Requests or recommends comparative performance measurement",
+          "passed": true,
+          "evidence": "It asks for runtime, dynamic load/store count, move count, compile time, and baseline numbers."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 6,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 2,
+        "failed": 0,
+        "total": 2,
+        "time_seconds": 62.0,
+        "tokens": 720,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Explains the conceptual distinction instead of dumping textbook definitions only",
+          "passed": true,
+          "evidence": "The response frames the distinction around how addresses are interpreted, not just around fixed-size versus variable-size chunks."
+        },
+        {
+          "text": "Connects the explanation to historical or modern-system context",
+          "passed": true,
+          "evidence": "It explains why modern systems favor paging and why segmentation still matters for x86 history and logical memory organization."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 7,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 65.0,
+        "tokens": 760,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Does not fully rewrite the entire report as the primary response",
+          "passed": true,
+          "evidence": "The response critiques the experiment design and asks for evidence instead of rewriting the report."
+        },
+        {
+          "text": "Focuses on experiment design, assumptions, and measurement validity",
+          "passed": true,
+          "evidence": "It focuses on repeat runs, warm-cache bias, workload size, initialization, and separating observation from explanation."
+        },
+        {
+          "text": "Points out what additional evidence or measurements are needed",
+          "passed": true,
+          "evidence": "It asks for repeated measurements, variance or error bars, workload size, cache-clearing details, and raw data."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6667,
+        "passed": 2,
+        "failed": 1,
+        "total": 3,
+        "time_seconds": 97.0,
+        "tokens": 1180,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "passed": true,
+          "evidence": "The response suggests debugging directions and does not provide a full allocator patch."
+        },
+        {
+          "text": "Frames the problem in terms of allocator invariants or heap metadata consistency",
+          "passed": true,
+          "evidence": "It discusses alloc bits, header/footer consistency, free-list duplication, and heap corruption."
+        },
+        {
+          "text": "Requests the smallest next debugging artifacts instead of asking for the whole project",
+          "passed": false,
+          "evidence": "It asks for a broad set of functions including malloc, free, coalesce, place, and free-list operations rather than the narrowest next artifact."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 93.0,
+        "tokens": 1080,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "passed": true,
+          "evidence": "No full patched code provided."
+        },
+        {
+          "text": "Organizes the diagnosis around Raft invariants such as term/state/votedFor or stale replies",
+          "passed": true,
+          "evidence": "Focuses on election state atomicity, stale replies, and term/state checks."
+        },
+        {
+          "text": "Asks for narrow next-step artifacts like election logs or specific handler snippets",
+          "passed": true,
+          "evidence": "Requests startElection, RequestVote, reply handling, and logs."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 113.8,
+        "tokens": 2115,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "passed": true,
+          "evidence": "No full patched code provided."
+        },
+        {
+          "text": "Analyzes lock ordering, latch protocol, or stale pointer lifetime instead of generic concurrency advice",
+          "passed": true,
+          "evidence": "Focuses on latch ordering, safe-node logic, pointer lifetime, and split/merge consistency."
+        },
+        {
+          "text": "Requests a concrete interleaving, lock trace, or minimal reproducer",
+          "passed": true,
+          "evidence": "Requests a lock trace or failure interleaving with thread and page information."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6667,
+        "passed": 2,
+        "failed": 1,
+        "total": 3,
+        "time_seconds": 228.6,
+        "tokens": 2780,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "passed": true,
+          "evidence": "No full patched code provided."
+        },
+        {
+          "text": "Explains lazy allocation in terms of trap/page-fault handling or page-table invariants",
+          "passed": true,
+          "evidence": "Explains lazy allocation semantics, usertrap, uvmunmap, copyin/copyout, and page alignment."
+        },
+        {
+          "text": "Requests the exact panic/trap information and a reproducible trigger",
+          "passed": false,
+          "evidence": "Requests code snippets and panic info, but does not insist on an exact panic plus a clear minimal trigger as directly."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6667,
+        "passed": 2,
+        "failed": 1,
+        "total": 3,
+        "time_seconds": 91.0,
+        "tokens": 1090,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a complete patched solution",
+          "passed": true,
+          "evidence": "The response offers debugging directions rather than a full implementation patch."
+        },
+        {
+          "text": "Focuses on sequence-space reasoning, overlap merge logic, or concrete packet interleavings",
+          "passed": true,
+          "evidence": "It discusses overlap policy, merge boundaries, next expected sequence, and payload offsets."
+        },
+        {
+          "text": "Asks for a specific packet trace or manual simulation case",
+          "passed": false,
+          "evidence": "It asks for a concrete example, but not a clearly structured trace or hand-simulated case set."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 5,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 258.9,
+        "tokens": 3027,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Avoids giving a one-line algorithm swap as the whole answer",
+          "passed": true,
+          "evidence": "The response explains several allocator strategies and tradeoffs instead of replacing the answer with a one-line algorithm name."
+        },
+        {
+          "text": "Explains spill decisions in terms of cost model, loop depth, or measurement tradeoffs",
+          "passed": true,
+          "evidence": "It discusses spill cost, hot paths, loop depth, splitting, and tradeoffs."
+        },
+        {
+          "text": "Requests or recommends comparative performance measurement",
+          "passed": true,
+          "evidence": "It asks for runtime, dynamic load/store, move counts, and baseline measurements."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 6,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 2,
+        "failed": 0,
+        "total": 2,
+        "time_seconds": 73.0,
+        "tokens": 860,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Explains the conceptual distinction instead of dumping textbook definitions only",
+          "passed": true,
+          "evidence": "The response frames the difference as two address-organization models rather than only listing definitions."
+        },
+        {
+          "text": "Connects the explanation to historical or modern-system context",
+          "passed": true,
+          "evidence": "It explains why modern systems favor paging and why segmentation still matters for x86 history and address-space thinking."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 7,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 81.0,
+        "tokens": 950,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Does not fully rewrite the entire report as the primary response",
+          "passed": true,
+          "evidence": "The response critiques the analysis structure rather than rewriting the full report."
+        },
+        {
+          "text": "Focuses on experiment design, assumptions, and measurement validity",
+          "passed": true,
+          "evidence": "It focuses on repeat runs, warm-up effects, workload size, and control of variables."
+        },
+        {
+          "text": "Points out what additional evidence or measurements are needed",
+          "passed": true,
+          "evidence": "It asks for repeated measurements, variability, parameters, measurement method, and raw data."
+        }
+      ],
+      "notes": []
+    }
+  ],
   "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 76.75,
+        "stddev": 8.8922,
+        "min": 62.0,
+        "max": 87.0
+      },
+      "tokens": {
+        "mean": 903.75,
+        "stddev": 107.0631,
+        "min": 720,
+        "max": 1015
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.875,
+        "stddev": 0.1725,
+        "min": 0.6667,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 129.5375,
+        "stddev": 71.9394,
+        "min": 73.0,
+        "max": 258.9
+      },
+      "tokens": {
+        "mean": 1635.25,
+        "stddev": 875.1337,
+        "min": 860,
+        "max": 3027
+      }
+    },
     "delta": {
-      "pass_rate": "+0.00",
-      "time_seconds": "+0.0",
-      "tokens": "+0"
+      "pass_rate": "+0.12",
+      "time_seconds": "-52.8",
+      "tokens": "-732"
     }
   },
   "notes": []

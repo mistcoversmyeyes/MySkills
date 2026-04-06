@@ -1,6 +1,19 @@
 {
   "eval_id": 0,
   "eval_name": "csapp-malloc-segfault",
-  "prompt": "我在做 CMU 15-213 的 Malloc Lab，我的实现总是 segfault。这是我的代码：[一个有 double-free bug 的 malloc 实现]。gdb 显示崩溃在 free() 函数里。我不懂为什么，能帮我看看吗？",
-  "assertions": []
+  "prompt": "\u6211\u5728\u505a CMU 15-213 \u7684 Malloc Lab\uff0c\u6211\u7684\u5b9e\u73b0\u603b\u662f segfault\u3002\u8fd9\u662f\u6211\u7684\u4ee3\u7801\uff1a[\u4e00\u4e2a\u6709 double-free bug \u7684 malloc \u5b9e\u73b0]\u3002gdb \u663e\u793a\u5d29\u6e83\u5728 free() \u51fd\u6570\u91cc\u3002\u6211\u4e0d\u61c2\u4e3a\u4ec0\u4e48\uff0c\u80fd\u5e2e\u6211\u770b\u770b\u5417\uff1f",
+  "assertions": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "type": "qualitative-hard-constraint"
+    },
+    {
+      "text": "Frames the problem in terms of allocator invariants or heap metadata consistency",
+      "type": "qualitative-key-behavior"
+    },
+    {
+      "text": "Requests the smallest next debugging artifacts instead of asking for the whole project",
+      "type": "qualitative-key-behavior"
+    }
+  ]
 }

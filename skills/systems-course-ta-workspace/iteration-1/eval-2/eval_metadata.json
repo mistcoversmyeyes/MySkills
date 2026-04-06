@@ -1,6 +1,19 @@
 {
   "eval_id": 2,
   "eval_name": "cmu15445-bplus-tree-concurrency",
-  "prompt": "我的 B+ tree concurrency 实现在高并发测试时会 crash 或者返回错误结果。单线程没问题。我用的是 latch crabbing 协议。这是我的代码：[C++ 代码，包含 latch 获取逻辑]。是不是死锁了？还是有数据竞争？",
-  "assertions": []
+  "prompt": "\u6211\u7684 B+ tree concurrency \u5b9e\u73b0\u5728\u9ad8\u5e76\u53d1\u6d4b\u8bd5\u65f6\u4f1a crash \u6216\u8005\u8fd4\u56de\u9519\u8bef\u7ed3\u679c\u3002\u5355\u7ebf\u7a0b\u6ca1\u95ee\u9898\u3002\u6211\u7528\u7684\u662f latch crabbing \u534f\u8bae\u3002\u8fd9\u662f\u6211\u7684\u4ee3\u7801\uff1a[C++ \u4ee3\u7801\uff0c\u5305\u542b latch \u83b7\u53d6\u903b\u8f91]\u3002\u662f\u4e0d\u662f\u6b7b\u9501\u4e86\uff1f\u8fd8\u662f\u6709\u6570\u636e\u7ade\u4e89\uff1f",
+  "assertions": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "type": "qualitative-hard-constraint"
+    },
+    {
+      "text": "Analyzes lock ordering, latch protocol, or stale pointer lifetime instead of generic concurrency advice",
+      "type": "qualitative-key-behavior"
+    },
+    {
+      "text": "Requests a concrete interleaving, lock trace, or minimal reproducer",
+      "type": "qualitative-key-behavior"
+    }
+  ]
 }

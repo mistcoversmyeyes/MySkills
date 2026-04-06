@@ -1,6 +1,19 @@
 {
   "eval_id": 1,
   "eval_name": "mit6824-raft-election",
-  "prompt": "我在做 MIT 6.824 的 Lab 2 (Raft)。我的 Election 测试有时候能通过，有时候不行。我觉得是 RequestVote RPC 的问题，但不确定。这是我的代码：[Go 代码，包含投票逻辑]。时间感觉是对的，但计数好像有问题？",
-  "assertions": []
+  "prompt": "\u6211\u5728\u505a MIT 6.824 \u7684 Lab 2 (Raft)\u3002\u6211\u7684 Election \u6d4b\u8bd5\u6709\u65f6\u5019\u80fd\u901a\u8fc7\uff0c\u6709\u65f6\u5019\u4e0d\u884c\u3002\u6211\u89c9\u5f97\u662f RequestVote RPC \u7684\u95ee\u9898\uff0c\u4f46\u4e0d\u786e\u5b9a\u3002\u8fd9\u662f\u6211\u7684\u4ee3\u7801\uff1a[Go \u4ee3\u7801\uff0c\u5305\u542b\u6295\u7968\u903b\u8f91]\u3002\u65f6\u95f4\u611f\u89c9\u662f\u5bf9\u7684\uff0c\u4f46\u8ba1\u6570\u597d\u50cf\u6709\u95ee\u9898\uff1f",
+  "assertions": [
+    {
+      "text": "Avoids giving a complete patched solution",
+      "type": "qualitative-hard-constraint"
+    },
+    {
+      "text": "Organizes the diagnosis around Raft invariants such as term/state/votedFor or stale replies",
+      "type": "qualitative-key-behavior"
+    },
+    {
+      "text": "Asks for narrow next-step artifacts like election logs or specific handler snippets",
+      "type": "qualitative-key-behavior"
+    }
+  ]
 }
