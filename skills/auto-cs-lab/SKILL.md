@@ -1,198 +1,252 @@
 ---
 name: auto-cs-lab
-description: 自动化完成 CS 课程实验报告全流程——从代码编写、运行验证、截图记录到报告生成。适用所有 CS 课程实验。
+description: 自动化完成 CS 课程实验报告全流程，从读取实验要求、补全代码、运行验证、采集截图到生成报告。适用于用户希望把课程实验和实验报告一起完成的场景。
 disable-model-invocation: true
-allow-tools: Read,
+allow-tools: Read, Write, Edit, Bash, Glob, Grep, MultiEdit, LS 
 ---
 
-# auto-cs-lab: CS 实验报告自动化
+# auto-cs-lab
 
-## 概述
+自动完成 CS 课程实验并撰写实验报告。
 
-本 Skill 提供 CS 课程实验报告的端到端自动化工作流。Agent 自主探索当前项目环境，发现实验指导手册和报告模板，按步骤完成实验并生成报告。
+如果当前 harness 支持 sub-agent，把它们当成“高阶工具”使用，只委派输入清楚、目标清楚、输出可验、共享状态弱的步骤。当前 skill 自带这些子代理：
 
-**核心设计原则**：
-- 实验内容和模板是外部输入，不在 Skill 中硬编码
-- Agent 自主决定何时截图、截什么内容
-- 工作流可适配任何 CS 课程实验
+- `agents/planner.md`：把材料整理成阶段计划
+- `agents/requirements-analyst.md`：提炼实验要求和模板要求
+- `agents/repo-auditor.md`：审计项目现状和可能的运行入口
+- `agents/report-drafter.md`：基于真实证据起草报告
 
----
+不要把强依赖当前桌面状态或共享运行状态的步骤委派出去，例如桌面截图、窗口切换、最终实际运行验证和最后一轮整合提交。
 
-## 前置检查与工具安装
+## 检查工具和环境
 
-### 第一步：环境检查
-
-运行环境检查脚本，了解当前工具状态：
+先检查当前环境是否具备完成任务所需的能力：
 
 ```bash
-bash scripts/mcp/check-env.sh
+bash ${CLAUDE_SKILL_DIR}/scripts/mcp/check-env.sh
 ```
 
-### 第二步：按需安装 MCP
+- 该脚本只检查常见安装方式；如果用户使用了自定义 MCP 配置，只要能力等价也可以继续。
+- 不要默认安装所有 MCP，只安装当前实验真正需要的能力。
 
-根据实验需要，安装缺失的工具：
+按需安装缺失工具：
 
 | MCP 服务器 | 用途 | 安装脚本 |
 |-----------|------|---------|
-| `office-docs` | Word 文档读写 | `bash scripts/mcp/install-office-docs.sh` |
-| `excel-mcp-server` | Excel 表格读写 | `bash scripts/mcp/install-excel.sh` |
-| `powerpoint-mcp-server` | PPT 读写 | `bash scripts/mcp/install-powerpoint.sh` |
-| `playwright-user/isolated` | 浏览器截图 | `bash scripts/mcp/install-playwright.sh` |
+| `office-docs` | Word 文档读写 | `bash ${CLAUDE_SKILL_DIR}/scripts/mcp/install-office-docs.sh` |
+| `excel-mcp-server` | Excel 表格读写 | `bash ${CLAUDE_SKILL_DIR}/scripts/mcp/install-excel.sh` |
+| `powerpoint-mcp-server` | PPT 读写 | `bash ${CLAUDE_SKILL_DIR}/scripts/mcp/install-powerpoint.sh` |
+| `playwright-user/isolated` | 浏览器截图 | `bash ${CLAUDE_SKILL_DIR}/scripts/mcp/install-playwright.sh` |
 
-**安装策略**：
-- 不是所有实验都需要所有 MCP。例如纯代码实验不需要 Playwright
-- 根据实验类型选择需要的 MCP
-- 安装后需 **重启 Claude Code** 使配置生效
+- 如果安装后需要重启当前 Agent 工具才能生效，要明确告诉用户。
+- 在能继续推进的情况下，不要因为某个可选 MCP 暂时不可用就停住整个任务。
 
-### 第三步：确认截图能力
-
-测试桌面截图是否正常：
+检查截图链路是否可用：
 
 ```bash
-bash scripts/screenshot.sh --output /tmp/test-screenshot.png
+bash ${CLAUDE_SKILL_DIR}/scripts/screenshot.sh --output /tmp/test-screenshot.png
 ```
 
-如果截图失败或全黑，检查：
-1. WSL 是否能调用 `powershell.exe`
+如果截图失败或全黑，优先检查：
+
+1. `powershell.exe` 是否可调用
 2. Windows 是否锁屏
-3. 输出目录是否有写权限
+3. 输出目录是否可写
 
----
+## 获取实验信息
 
-## 工作流
+扫描当前项目目录，优先寻找：
 
-### 1. 获取实验信息
+1. `README.md`
+2. `*.docx` / `*.pdf`
+3. `*.md`
+4. 代码、测试、构建脚本、数据文件
 
-扫描当前项目目录，发现并读取实验相关文件：
+读取时优先使用：
 
-**优先搜索**：
-1. `README.md` — 课程说明或实验指引
-2. `.docx` / `.pdf` — 实验指导手册或报告模板
-3. `.md` — 实验说明文件
-4. 代码文件 — 已有的实验代码
+- `mcp__office-docs__read_docx` 读取 Word 文档
+- `Read` 读取 Markdown 和文本文件
+- PDF 读取能力读取 PDF
 
-**读取策略**：
-- 使用 `mcp__office-docs__read_docx` 读取 Word 文档
-- 使用 `Read` 工具读取 Markdown/文本文件
-- 使用 PDF 读取能力读取 PDF 文档
+从材料里提取这些信息：
 
-**提取信息**：
 - 实验目标
 - 实验步骤
 - 预期结果
-- 评分标准（如有）
+- 评分标准
 - 报告模板结构
 
-### 2. 理解实验要求
+如果同时存在实验指导书和报告模板，先区分它们各自的用途，不要混用。
 
-从指导手册中提取关键信息：
-- 需要编写什么代码/配置
-- 需要什么运行结果
-- 需要截图什么内容
-- 报告格式要求
+如果材料很多、要求复杂、模板和指导书并存，优先委派 `agents/requirements-analyst.md`，让它先输出结构化要求摘要，再继续主流程。
 
-### 3. 执行实验
+## 理解任务并拆分步骤
 
-按步骤编写代码/配置，运行并验证：
+在真正修改代码前，先明确：
 
-1. **编写代码** — 根据实验要求编写
-2. **运行验证** — 执行代码确认结果正确
-3. **记录过程** — 在关键步骤截图
+- 要补什么代码或配置
+- 要跑什么命令或测试
+- 哪些结果必须展示
+- 哪些步骤需要截图
+- 报告最终要交什么文件
 
-### 4. 关键步骤截图
+把任务拆成若干阶段再执行，通常至少包括：
 
-**截图时机**：Agent 根据实验内容自主判断何时截图。典型场景：
-- 代码编写完成后的 IDE 截图
-- 运行结果截图（终端输出、测试通过等）
-- 配置过程截图（数据库 GUI、Web 界面等）
-- 错误排查截图（如有）
+1. 环境准备
+2. 实现或修改
+3. 运行验证
+4. 截图留证
+5. 报告生成
 
-**截图工具选择规则**：
+如果实验跨度较大、目录复杂或用户一次性给了很多上下文，委派 `agents/planner.md` 先给出阶段计划。主 agent 根据计划决定是否继续委派其他子代理。
 
-| 场景 | 工具 | 命令 |
-|------|------|------|
-| 桌面应用/IDE/终端 | `scripts/screenshot.sh` | `bash scripts/screenshot.sh [--window \| --find <keyword> \| --region x,y,w,h] [--delay N] [--output <path>]` |
-| 浏览器页面 | `mcp__playwright-user__browser_take_screenshot` | 直接调用 Playwright MCP |
+## 执行实验并验证结果
 
-**截图前窗口查询**：
+按照实验要求编写或修改代码，然后运行并验证。
 
-截图前可用 `win-info.sh` 了解当前桌面窗口状态：
+- 优先使用实验文档里给出的命令、样例、测试方式。
+- 没有明确命令时，再根据项目结构自行判断。
+- 运行后要保留证据，例如终端输出、测试结果、生成文件。
+
+如果当前仓库结构复杂、语言栈不清楚、运行入口不明显，可以先委派 `agents/repo-auditor.md` 做只读审计，再由主 agent 自己决定怎么改代码和怎么运行。
+
+如果出现错误：
+
+- 先自行排查并重试
+- 修复后重新验证
+- 如果仍然无法完成，保留错误信息和已尝试步骤，不要假装成功
+
+## 采集关键截图
+
+这一阶段默认由主 agent 自己完成，不要委派给子代理。原因是截图、窗口激活、桌面前台状态都强依赖共享环境，多个 agent 并行操作很容易互相干扰。
+
+截图要服务于报告和证据链，不要机械乱截。优先保留这些内容：
+
+- 代码或配置完成后的编辑器界面
+- 编译成功、测试通过、程序运行结果
+- GUI、数据库工具、仿真器、浏览器页面中的关键状态
+- 有价值的报错和修复前后对比
+
+截图前可先查看窗口状态：
 
 ```bash
 # 列出所有可见窗口
-bash scripts/win-info.sh --list
+bash ${CLAUDE_SKILL_DIR}/scripts/win-info.sh --list
 
 # 搜索特定窗口
-bash scripts/win-info.sh --find "IDEA"
+bash ${CLAUDE_SKILL_DIR}/scripts/win-info.sh --find "IDEA"
 
 # 查看当前活动窗口
-bash scripts/win-info.sh --active
+bash ${CLAUDE_SKILL_DIR}/scripts/win-info.sh --active
 
 # 需要物理像素坐标时，显式提供 DPI 缩放
-bash scripts/win-info.sh --scale 175 --find "IDEA"
+bash ${CLAUDE_SKILL_DIR}/scripts/win-info.sh --scale 175 --find "IDEA"
 ```
 
-**截图存储规范**：
-- 目录: `screenshots/<experiment-name>/`
-- 命名: `<step-number>_<description>.png`
-- 例如: `screenshots/lab1/01_ide_code.png`, `screenshots/lab1/02_test_result.png`
+如需确认屏幕尺寸和 DPI：
 
-**截图脚本用法**：
+```bash
+bash ${CLAUDE_SKILL_DIR}/scripts/screen-info.sh
+```
+
+常用截图方式：
 
 ```bash
 # 全屏截图（默认）
-bash scripts/screenshot.sh --output screenshots/lab1/01_overview.png
+bash ${CLAUDE_SKILL_DIR}/scripts/screenshot.sh --output screenshots/lab1/01_overview.png
 
 # 活动窗口截图
-bash scripts/screenshot.sh --window --output screenshots/lab1/02_ide.png
+bash ${CLAUDE_SKILL_DIR}/scripts/screenshot.sh --window --output screenshots/lab1/02_ide.png
 
 # 按窗口标题关键词查找并截图
-bash scripts/screenshot.sh --find "IDEA" --output screenshots/lab1/02_ide.png
+bash ${CLAUDE_SKILL_DIR}/scripts/screenshot.sh --find "IDEA" --output screenshots/lab1/03_idea.png
 
-# 区域截图 (x,y,宽,高)
-bash scripts/screenshot.sh --region 0,0,1920,1080 --output screenshots/lab1/03_region.png
+# 区域截图
+bash ${CLAUDE_SKILL_DIR}/scripts/screenshot.sh --region 0,0,1920,1080 --output screenshots/lab1/04_region.png
 
-# 延迟截图（截图前等待）
-bash scripts/screenshot.sh --delay 3 --output screenshots/lab1/04_delayed.png
+# 延迟截图
+bash ${CLAUDE_SKILL_DIR}/scripts/screenshot.sh --delay 3 --output screenshots/lab1/05_delayed.png
 ```
 
-**`--find` 模式工作流程**：
-1. 搜索标题包含关键词的窗口（EnumWindows + GetWindowText）
+`--find` 模式会：
+
+1. 搜索标题包含关键词的窗口
 2. 选择最匹配的可见窗口
 3. 尝试恢复并激活该窗口
-4. 读取该窗口最终矩形并截取对应区域
+4. 读取最终窗口矩形并截取该区域
 
-### 5. 生成报告
+截图建议统一保存到：
 
-使用 `mcp__office-docs__write_docx` 或 `mcp__office-docs__edit_docx_paragraph` 生成 .docx 报告。
-
-**报告结构**（如无模板则使用以下通用结构）：
-
+```text
+screenshots/<experiment-name>/
 ```
+
+命名建议：
+
+```text
+<step-number>_<description>.png
+```
+
+例如：
+
+```text
+screenshots/lab1/01_ide_code.png
+screenshots/lab1/02_test_result.png
+```
+
+## 生成报告
+
+优先按用户提供的模板生成报告；没有模板时，再使用通用实验报告结构。
+
+当实现和验证证据已经稳定、截图文件名也已经基本确定后，可以委派 `agents/report-drafter.md` 先起草报告正文，再由主 agent 负责最终写入文档和补齐缺口。
+
+可使用：
+
+- `mcp__office-docs__write_docx`
+- `mcp__office-docs__edit_docx_paragraph`
+
+通用结构：
+
+```text
 实验报告
 ├── 实验名称
 ├── 实验目的
 ├── 实验环境
 ├── 实验内容
-│   ├── 步骤1: 描述
-│   │   ├── 操作说明
-│   │   └── 截图引用: [图片]
-│   ├── 步骤2: 描述
-│   │   └── ...
-│   └── 步骤N: 描述
 ├── 实验结果
 └── 实验总结/心得
 ```
 
-**如果有模板**：严格按照模板结构生成，在对应位置填入内容。
+写报告时保持和真实执行过程一致：
 
----
+- 步骤描述要对应实际操作
+- 结果分析要基于真实输出
+- 截图说明要对应图片内容
+- 没做完的部分要明确标注，不要编造结果
 
-## 注意事项
+默认用中文撰写报告；如果课程或模板另有要求，以课程要求为准。
 
-1. **截图是关键**：确保每个重要步骤都有截图作为证据
-2. **自主判断**：Agent 应根据实验内容自主决定截图时机，不依赖固定规则
-3. **黑屏检测**：截图脚本会自动检测锁屏状态，避免生成无效截图
-4. **文件引用**：报告中引用的截图路径必须是相对路径（相对于报告文件位置）
-5. **幂等安装**：所有 MCP 安装脚本都是幂等的，重复运行不会出错
-6. **中文写作**：实验报告使用中文撰写，代码注释用英文
+## 交付结果
+
+完成任务时，尽量同时交付：
+
+- 修改后的实验代码或配置
+- 运行验证结果
+- `screenshots/<experiment-name>/` 下的截图
+- 报告文件，或可直接继续完善的报告草稿
+
+如果环境限制导致无法完全交付，也要明确告诉用户：
+
+- 已完成哪些部分
+- 缺了哪些部分
+- 阻塞原因是什么
+- 下一步最合理的补救方式是什么
+
+最终交付前，主 agent 要自己复核一遍所有产物之间是否一致：代码、运行结果、截图、报告不能互相矛盾。
+
+## 保持真实
+
+- 不要伪造运行结果、截图或测试通过记录
+- 不要把推测写成已验证结论
+- 不要忽略模板、评分标准和命名规范
+- 不要只给建议而不落地执行，除非环境确实阻止执行
