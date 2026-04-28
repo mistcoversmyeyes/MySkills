@@ -466,6 +466,7 @@ The agents/ directory contains instructions for specialized subagents. Read them
 
 The references/ directory has additional documentation:
 - `references/schemas.md` — JSON structures for evals.json, grading.json, etc.
+- `references/official-docs.md` — Local copy of the Claude Code Skills official documentation (from code.claude.com/docs). Consult this whenever you need to check the Skill spec, frontmatter fields, bundled resources conventions (`scripts/`, `references/`, `assets/`), invocation controls, or other authoritative details — no need to fetch the docs online.
 
 ---
 
